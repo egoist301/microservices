@@ -1,12 +1,11 @@
 package com.epam.controller;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.hibernate.validator.constraints.Length;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,30 +20,29 @@ import org.springframework.web.bind.annotation.RestController;
 import com.epam.domain.Song;
 import com.epam.service.SongService;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@RestController
 @Validated
 @RequestMapping("/songs")
-@AllArgsConstructor
+@RestController
+@RequiredArgsConstructor
 public class SongController {
-  private SongService songService;
+  private final SongService songService;
 
   @GetMapping("/{id}")
   public ResponseEntity<Song> get(@PathVariable Long id) {
-    return new ResponseEntity<>(songService.findById(id), HttpStatus.OK);
+    return ResponseEntity.ok(songService.findById(id));
   }
 
   @PostMapping
-  public ResponseEntity<Long> create(@Valid @RequestBody Song song) {
-    return new ResponseEntity<>(songService.save(song), HttpStatus.CREATED);
+  public ResponseEntity<Map<String, Long>> create(@Valid @RequestBody Song song) {
+    return ResponseEntity.ok(Map.of("id", songService.save(song)));
   }
 
   @DeleteMapping(params = "ids")
-  public ResponseEntity<Long[]> delete(@RequestParam @Length(max = 200) String ids) {
-    return new ResponseEntity<>(
-        songService.delete(
-            Arrays.stream(ids.split(",")).map(Long::parseLong).collect(Collectors.toList())),
-        HttpStatus.OK);
+  public ResponseEntity<Map<String, Long[]>> delete(@RequestParam @Length(max = 200) String ids) {
+    var deletedIds =
+        songService.delete(Arrays.stream(ids.split(",")).map(Long::parseLong).toList());
+    return ResponseEntity.ok(Map.of("ids", deletedIds));
   }
 }

@@ -10,12 +10,12 @@ import com.epam.repository.SongRepository;
 import com.epam.service.SongService;
 import com.epam.service.exception.EntityNotFoundException;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SongServiceImpl implements SongService {
-  private SongRepository songRepository;
+  private final SongRepository songRepository;
 
   @Override
   public Song findById(Long id) {

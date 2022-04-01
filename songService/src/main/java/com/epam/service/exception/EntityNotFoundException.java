@@ -1,5 +1,8 @@
 package com.epam.service.exception;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class EntityNotFoundException extends RuntimeException {
   public EntityNotFoundException(Long id) {
     this("Entity with id=" + id + " does not exist.");
@@ -15,8 +18,5 @@ public class EntityNotFoundException extends RuntimeException {
 
   public EntityNotFoundException(Throwable cause) {
     super(cause);
-  }
-
-  public EntityNotFoundException() {
   }
 }
