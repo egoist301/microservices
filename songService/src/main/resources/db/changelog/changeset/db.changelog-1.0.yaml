@@ -5,7 +5,6 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: song
-            schemaName: songService
             columns:
               - column:
                   name: id
