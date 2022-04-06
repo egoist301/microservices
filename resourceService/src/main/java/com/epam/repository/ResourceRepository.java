@@ -9,4 +9,6 @@ import com.epam.domain.Resource;
 
 public interface ResourceRepository extends JpaRepository<Resource, Long> {
   List<Resource> deleteAllByIdIn(Collection<Long> ids);
+
+  List<Resource> findAllBySentFalse();
 }

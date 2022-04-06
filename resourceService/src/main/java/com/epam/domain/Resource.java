@@ -20,4 +20,7 @@ public class Resource {
 
   @Column(name = "file_key")
   private String fileKey;
+
+  @Column(name = "sent")
+  private Boolean sent = Boolean.TRUE;
 }
