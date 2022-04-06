@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: createTableSong
+      author: Yauheni Filipovich
+      changes:
+        - createTable:
+            tableName: song
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: album
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: artist
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: length
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: resource_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: YEAR
+                  type: INTEGER
+                  constraints:
+                    nullable: false

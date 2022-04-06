@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: createTableResource
+      author: Yauheni Filipovich
+      changes:
+        - createTable:
+            tableName: resource
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: file_key
+                  type: VARCHAR(255)
