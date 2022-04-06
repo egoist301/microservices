@@ -36,9 +36,10 @@ public class ResourceServiceImpl implements ResourceService {
     Resource resource = new Resource();
     resource.setFileKey(file.getOriginalFilename());
     Resource createdResource = resourceRepository.save(resource);
-    awsS3Service.save(file, getFileKey(createdResource.getId(), createdResource.getFileKey()));
-    resourceCreatedQueueProducerService.produce(createdResource.getId());
-    return createdResource.getId();
+    Long createdResourceId = createdResource.getId();
+    awsS3Service.save(file, getFileKey(createdResourceId, createdResource.getFileKey()));
+    resourceCreatedQueueProducerService.produce(createdResourceId);
+    return createdResourceId;
   }
 
   private String getFileKey(Long id, String fileKey) {
