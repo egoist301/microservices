@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: addSentColumn
+      author: Yauheni Filipovich
+      changes:
+        - addColumn:
+            tableName: resource
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: sent
+                  type: TINYINT(1)
+                  defaultValue: "1"

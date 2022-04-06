@@ -36,19 +36,14 @@ public class AwsS3ServiceImpl implements AwsS3Service {
   }
 
   @Override
-  public String save(Long id, MultipartFile file) {
-    ObjectMetadata metadata = new ObjectMetadata();
-    String filename = file.getOriginalFilename();
+  public void save(MultipartFile file, String fileKey) {
     try {
-      InputStream fileContent = file.getInputStream();
-      String fileKey = id + "/" + filename;
-      metadata.setContentLength(fileContent.available());
-
+      InputStream input = file.getInputStream();
+      ObjectMetadata metadata = new ObjectMetadata();
+      metadata.setContentLength(input.available());
       final PutObjectRequest putObjectRequest =
-          new PutObjectRequest(bucketName, fileKey, fileContent, metadata);
-
+          new PutObjectRequest(bucketName, fileKey, input, metadata);
       amazonS3.putObject(putObjectRequest);
-      return fileKey;
     } catch (IOException e) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.epam.service.ResourceService;
 
@@ -32,6 +34,10 @@ public class ResourceController {
 
   @PostMapping
   public ResponseEntity<Map<String, Long>> create(@RequestParam("file") MultipartFile file) {
+    String originalFileName = file.getOriginalFilename();
+    if (originalFileName == null || !originalFileName.endsWith(".mp3")) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    }
     return ResponseEntity.ok(Map.of("id", resourceService.save(file)));
   }
 
