@@ -28,7 +28,7 @@ public class ResourceCreatedQueueProducerServiceImpl
   private final ResourceRepository resourceRepository;
   private final RabbitTemplateReturnCallback returnCallback;
 
-  @Value("${spring.rabbitmq.exchange-name}")
+  @Value("${spring.rabbitmq.template.exchange}")
   private String resourceCreatedEventExchangeName;
 
   @Async
