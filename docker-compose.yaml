@@ -1,0 +1,73 @@
+version: "3.9"
+services:
+  mysql-song:
+    image: mysql
+    container_name: mysql-song
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: [ "CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-P', '3306', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
+      timeout: 20s
+      retries: 10
+
+  mysql-resource:
+    image: mysql
+    container_name: mysql-resource
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: [ "CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-P', '3307', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
+      timeout: 20s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+      - "4571:4571"
+  resource-service:
+    container_name: resource-service
+    build: ./resourceService
+    ports:
+      - "8081:8081"
+    depends_on:
+      mysql-resource:
+        condition: service_healthy
+    env_file:
+      - ./resourceService/resourceService.env
+  song-service:
+    container_name: song-service
+    build: ./songService
+    ports:
+      - "8082:8082"
+    depends_on:
+      mysql-song:
+        condition: service_healthy
+    env_file:
+      - ./songService/songService.env
+  resource-processor:
+    container_name: resource-processor
+    build: ./resourceProcessor
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./resourceProcessor/resourceProcessor.env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
