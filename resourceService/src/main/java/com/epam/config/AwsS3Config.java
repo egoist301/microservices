@@ -35,7 +35,7 @@ public class AwsS3Config {
         .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(url, region))
         .withCredentials(
             new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
-        .withPathStyleAccessEnabled(false)
+        .enablePathStyleAccess()
         .build();
   }
 }

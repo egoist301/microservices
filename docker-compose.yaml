@@ -41,6 +41,7 @@ services:
     ports:
       - "4566:4566"
       - "4571:4571"
+
   resource-service:
     container_name: resource-service
     build: ./resourceService
