@@ -27,7 +27,7 @@ public class ResourceServiceImpl implements ResourceService {
   public byte[] findById(Long id) {
     Resource resource =
         resourceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
-    return awsS3Service.getFileBytesByKey(resource.getFileKey());
+    return awsS3Service.getFileBytesByKey(getFileKey(id, resource.getFileKey()));
   }
 
   @Transactional

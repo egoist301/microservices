@@ -35,7 +35,7 @@ public class QueueConsumerServiceImpl implements QueueConsumerService {
   public void receiveMessage(Long resourceId, Message message) {
     if (shouldProcess(message.getMessageProperties().getHeader("x-death"))) {
       byte[] resourceBinaryData =
-          resourceServiceClient.getResourceBinaryData(bytesToLong(message.getBody()));
+          resourceServiceClient.getResourceBinaryData(resourceId);
       SongMetadata songMetadata =
           resourceProcessorService.retrieveResourceMetadata(resourceBinaryData, resourceId);
       songServiceClient.saveSong(songMetadata);
@@ -55,9 +55,5 @@ public class QueueConsumerServiceImpl implements QueueConsumerService {
       return count <= maxDeathsCount;
     }
     return true;
-  }
-
-  private long bytesToLong(byte[] bytes) {
-    return new BigInteger(bytes).longValue();
   }
 }

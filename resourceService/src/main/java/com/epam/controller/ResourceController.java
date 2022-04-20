@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class ResourceController {
   private final ResourceService resourceService;
 
-  @GetMapping(value = "/{id}", produces = "audio/mpeg")
+  @GetMapping(value = "/{id}")
   public ResponseEntity<byte[]> get(@PathVariable Long id) {
     return ResponseEntity.ok(resourceService.findById(id));
   }

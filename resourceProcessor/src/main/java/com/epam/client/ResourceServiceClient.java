@@ -16,6 +16,6 @@ public interface ResourceServiceClient {
               delayExpression = "${resource-service.request.base-retry-delay}",
               maxDelayExpression = "${resource-service.request.max-retry-delay}",
               multiplierExpression = "${resource-service.request.retry-delay-multiplier}"))
-  @GetMapping("/resources/{resourceId}")
+  @GetMapping(value = "/resources/{resourceId}")
   byte[] getResourceBinaryData(@PathVariable Long resourceId);
 }

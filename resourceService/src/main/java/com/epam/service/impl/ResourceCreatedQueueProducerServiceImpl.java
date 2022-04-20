@@ -4,10 +4,7 @@ import java.util.List;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
-import org.springframework.retry.annotation.Retryable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -28,18 +25,9 @@ public class ResourceCreatedQueueProducerServiceImpl
   private final ResourceRepository resourceRepository;
   private final RabbitTemplateReturnCallback returnCallback;
 
-  @Value("${spring.rabbitmq.template.exchange}")
+  @Value("${spring.rabbitmq.exchange-name}")
   private String resourceCreatedEventExchangeName;
 
-  @Async
-  @Retryable(
-      value = RuntimeException.class,
-      maxAttemptsExpression = "${spring.rabbitmq.producer.retries-count}",
-      backoff =
-          @Backoff(
-              delayExpression = "${spring.rabbitmq.producer.base-retry-delay}",
-              maxDelayExpression = "${spring.rabbitmq.producer.max-retry-delay}",
-              multiplierExpression = "${spring.rabbitmq.producer.retry-delay-multiplier}"))
   @Override
   public void produce(Long resourceId) {
     rabbitTemplate.setExchange(resourceCreatedEventExchangeName);
