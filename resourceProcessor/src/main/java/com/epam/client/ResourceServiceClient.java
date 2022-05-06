@@ -6,7 +6,7 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "resource-service", url = "${resource-service.url}")
+@FeignClient("resourceservice")
 public interface ResourceServiceClient {
   @Retryable(
       value = RuntimeException.class,

@@ -38,9 +38,32 @@ services:
 
   localstack:
     image: localstack/localstack
+    container_name: "localstack"
     ports:
       - "4566:4566"
       - "4571:4571"
+    environment:
+      DEFAULT_REGION: us-west-1
+      SERVICES: s3
+      EDGE_PORT: 4566
+      AWS_ACCESS_KEY_ID: localstack
+      AWS_SECRET_ACCESS_KEY: localstack
+      AWS_DEFAULT_REGION: us-west-1
+      HOSTNAME: localstack
+    labels:
+      - "virtual.host=*.eu-west-1.amazonaws.com *.dualstack.eu-west-1.amazonaws.com *.s3.eu-west-1.amazonaws.com *.s3.dualstack.eu-west-1.amazonaws.com *.amazonaws.com *.s3.amazonaws.test *.amazonaws.test amazonaws.test"
+      - "virtual.tls=internal"
+    healthcheck:
+      test: [ "CMD", "awslocal", "s3", "ls" ]
+      interval: 5s
+
+  eureka-server:
+    container_name: eureka-server
+    build: ./eurekaserver
+    ports:
+      - "8761:8761"
+    expose:
+      - '8761'
 
   resource-service:
     container_name: resource-service
@@ -72,3 +95,13 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+
+  api-gateway:
+    container_name: api-gateway
+    build: gateway/
+    ports:
+      - "8090:8090"
+    expose:
+      - '8090'
+    env_file:
+      - "./gateway/gateway.env"
