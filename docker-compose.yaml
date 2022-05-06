@@ -95,3 +95,13 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+
+  api-gateway:
+    container_name: api-gateway
+    build: gateway/
+    ports:
+      - "8090:8090"
+    expose:
+      - '8090'
+    env_file:
+      - "./gateway/gateway.env"
