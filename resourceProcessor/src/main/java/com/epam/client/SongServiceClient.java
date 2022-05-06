@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.epam.model.SongMetadata;
 
-@FeignClient(name = "song-service", url = "${song-service.url}")
+@FeignClient("songservice")
 public interface SongServiceClient {
   @Retryable(
       value = RuntimeException.class,
